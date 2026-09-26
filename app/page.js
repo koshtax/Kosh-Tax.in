@@ -27,15 +27,7 @@ export default function Home() {
       <header className="bg-teal text-white p-4 shadow-md flex justify-between items-center px-8">
         <div className="flex items-center gap-4">
           {/* Logo Integration */}
-          <div className="bg-white p-1 rounded">
-            <Image 
-              src="/kosh-tax-logo.png" 
-              alt="Kosh-Tax Logo" 
-              width={140} 
-              height={45} 
-              priority
-              className="object-contain h-10 w-auto"
-            />
+          <div className="bg-white p-1 rounded"><img src="/kosh-tax-logo.svg" alt="Kosh-Tax Logo" className="object-contain h-10 w-auto" />
           </div>
           <h1 className="text-xl font-bold tracking-wide hidden sm:block border-l pl-4 border-teal-light">
             Form 16 Generator <span className="text-xs bg-teal-dark px-2 py-1 rounded ml-2">FY 2025-26</span>
