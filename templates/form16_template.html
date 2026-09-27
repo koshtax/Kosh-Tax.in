@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <title>Form 16 & Schedule of Income-Tax</title>
+    <style>
+        @page {
+            size: A4 portrait;
+            margin: 12mm 15mm 12mm 15mm;
+        }
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 10px;
+            color: #000;
+            line-height: 1.2;
+        }
+        .page-break {
+            page-break-before: always;
+        }
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .text-left { text-align: left; }
+        .bold { font-weight: bold; }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 4px;
+            margin-bottom: 6px;
+        }
+        table, th, td {
+            border: 1px solid #000;
+        }
+        th, td {
+            padding: 3px 5px;
+            vertical-align: middle;
+        }
+        .no-border, .no-border td, .no-border th {
+            border: none !important;
+        }
+        .header-title {
+            font-size: 13px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 1.3;
+        }
+        .sub-header {
+            font-size: 11px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        .signature-section {
+            margin-top: 25px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PAGE 1: SCHEDULE OF INCOME TAX (tds1.pdf Page 1) -->
+    <div class="header-title">नई कर व्यवस्था के तहत<br>Schedule of Income - Tax<br>आयकर की अनुसूची</div>
+    <div class="text-center bold" style="margin: 3px 0;">(चार प्रतियों में भर कर दें)</div>
+    <div class="text-center bold" style="margin-bottom: 8px;">वित्तीय वर्ष {{ data.financial_year }} (कर निर्धारण वर्ष {{ data.assessment_year }})</div>
+
+    <table class="no-border" style="margin-bottom: 8px;">
+        <tr>
+            <td style="width: 25%;" class="bold">करदाता का नाम</td>
+            <td style="width: 40%;">: {{ data.employee_name }}</td>
+            <td style="width: 15%;" class="bold">पदनाम</td>
+            <td style="width: 20%;">: {{ data.designation }}</td>
+        </tr>
+        <tr>
+            <td class="bold">कार्यालय/विद्यालय का नाम</td>
+            <td colspan="3">: {{ data.office_name }}</td>
+        </tr>
+        <tr>
+            <td class="bold">स्थायी लेखा संख्या (PAN)</td>
+            <td colspan="3">: {{ data.pan }}</td>
+        </tr>
+    </table>
+
+    <div class="bold" style="background-color: #f2f2f2; padding: 2px;">क. वेतन स्रोत से आय का विवरण:</div>
+    <table>
+        <thead>
+            <tr style="background-color: #fafafa;">
+                <th style="width: 70%;" class="text-left">विवरण</th>
+                <th style="width: 15%;" class="text-right">राशि (रू०)</th>
+                <th style="width: 15%;" class="text-right">राशि (रू०)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>01. वेतन (दिनांक 01.03.{{ data.fy_start_year }} से 28.02.{{ data.fy_end_year }} तक)</td>
+                <td class="text-right">{{ "%.2f"|format(data.salary_basic) }}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>02. महँगाई भत्ता</td>
+                <td class="text-right">{{ "%.2f"|format(data.salary_da) }}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>03. मकान किराया भत्ता</td>
+                <td class="text-right">{{ "%.2f"|format(data.salary_hra) }}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>04. चिकित्सा भत्ता</td>
+                <td class="text-right">{{ "%.2f"|format(data.salary_medical) }}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>05. परिवहन भत्ता</td>
+                <td class="text-right">{{ "%.2f"|format(data.salary_ta) }}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>06. परिवहन भत्ता पर महंगाई भत्ता</td>
+                <td class="text-right">0.00</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>07. विशेष वेतन/बोनस / मानदेय / नर्सिंग भत्ता</td>
+                <td class="text-right">0.00</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>08. महंगाई भत्ता की बकाया राशि</td>
+                <td class="text-right">0.00</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>09. बकाया वेतन एवं भत्ते का राशि</td>
+                <td class="text-right">{{ "%.2f"|format(data.salary_arrear) }}</td>
+                <td></td>
+            </tr>
+            <tr class="bold">
+                <td>10. वेतन स्रोत से प्राप्त कुल आय</td>
+                <td></td>
+                <td class="text-right">{{ "%.2f"|format(data.gross_salary) }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="bold" style="background-color: #f2f2f2; padding: 2px; margin-top: 6px;">ख. आयकर की संगणना</div>
+    <table>
+        <tbody>
+            <tr>
+                <td style="width: 70%;">01. वेतन स्रोत से प्राप्त कुल आय</td>
+                <td style="width: 15%;"></td>
+                <td style="width: 15%;" class="text-right">{{ "%.2f"|format(data.gross_salary) }}</td>
+            </tr>
+            <tr>
+                <td>02. घटायें धारा 16 (ia) के अन्तर्गत मानक कटौती की राशि रू० 75,000.00</td>
+                <td></td>
+                <td class="text-right">{{ "%.2f"|format(data.standard_deduction) }}</td>
+            </tr>
+            <tr class="bold">
+                <td>03. सकल कुल आय (01 - 02)</td>
+                <td></td>
+                <td class="text-right">{{ "%.2f"|format(data.taxable_income) }}</td>
+            </tr>
+            <tr>
+                <td>04. जोडें: अन्य स्रोतों से आय / गृह सम्पत्ति से आय / बैंक ब्याज इत्यादि</td>
+                <td></td>
+                <td class="text-right">0.00</td>
+            </tr>
+            <tr class="bold">
+                <td>08. सकल प्राप्त आय (Gross Total Income)</td>
+                <td></td>
+                <td class="text-right">{{ "%.2f"|format(data.taxable_income) }}</td>
+            </tr>
+            <tr class="bold">
+                <td>09. कर योग्य आय (रु० 10 के गुणक में परिवर्तित राशि)</td>
+                <td></td>
+                <td class="text-right">{{ "%.2f"|format(data.taxable_income) }}</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="bold" style="background-color: #fafafa;">10. रु० {{ "%.2f"|format(data.taxable_income) }} पर देय आयकर:</td>
+            </tr>
+            <tr>
+                <td style="padding-left: 20px;">₹0 - ₹4 Lakh: Nil</td>
+                <td class="text-right">0.00</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="padding-left: 20px;">₹4 Lakh - ₹8 Lakh: 5%</td>
+                <td class="text-right">{{ "%.2f"|format(data.tax_slab_1) }}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="padding-left: 20px;">₹8 Lakh - ₹12 Lakh: 10%</td>
+                <td class="text-right">{{ "%.2f"|format(data.tax_slab_2) }}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="padding-left: 20px;">₹12 Lakh - ₹16 Lakh: 15%</td>
+                <td class="text-right">{{ "%.2f"|format(data.tax_slab_3) }}</td>
+                <td></td>
+            </tr>
+            <tr class="bold">
+                <td style="padding-left: 20px;">TOTAL COMPUTED TAX</td>
+                <td></td>
+                <td class="text-right">{{ "%.2f"|format(data.tax_before_rebate) }}</td>
+            </tr>
+            <tr>
+                <td>11. घटायें- धारा 87A के तहत कर में राहत (Rebate)</td>
+                <td></td>
+                <td class="text-right">{{ "%.2f"|format(data.rebate_87a) }}</td>
+            </tr>
+            <tr class="bold">
+                <td>12. शुद्ध देय आयकर (10 - 11)</td>
+                <td></td>
+                <td class="text-right">{{ "%.2f"|format(data.tax_after_rebate) }}</td>
+            </tr>
+            <tr>
+                <td>13. जोड़े- 4% शिक्षा एवं स्वास्थ्य उपकर (Cess)</td>
+                <td></td>
+                <td class="text-right">{{ "%.2f"|format(data.cess_amount) }}</td>
+            </tr>
+            <tr class="bold">
+                <td>14. कुल देय आयकर (12 + 13)</td>
+                <td></td>
+                <td class="text-right">{{ "%.2f"|format(data.total_tax) }}</td>
+            </tr>
+            <tr>
+                <td>16. घटायें- प्रतिमाह वेतन से काटा गया अग्रिम आयकर (TDS Already Deducted)</td>
+                <td></td>
+                <td class="text-right">{{ "%.2f"|format(data.actual_tds) }}</td>
+            </tr>
+            <tr class="bold">
+                <td>18. वित्तीय वर्ष {{ data.financial_year }} में आयकर की शेष भुगतेय / (वापसी योग्य) राशि</td>
+                <td></td>
+                <td class="text-right">{{ "%.2f"|format(data.balance_tds) }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="no-border signature-section">
+        <tr>
+            <td style="width: 50%;">कोषागार का नाम: <b>{{ data.treasury_name }}</b></td>
+            <td style="width: 50%;" class="text-right">निकासी एवं व्ययन पदाधिकारी</td>
+        </tr>
+        <tr>
+            <td style="padding-top: 30px;">करदाता का हस्ताक्षर: ........................</td>
+            <td style="padding-top: 30px;" class="text-right">हस्ताक्षर एवं मुहर: ........................</td>
+        </tr>
+    </table>
+
+    <!-- PAGE 2: FORM 16 PART A (tds1.pdf Page 2) -->
+    <div class="page-break"></div>
+    <div class="header-title">FORM NO. 16</div>
+    <div class="sub-header">[See rule 31(1)(a)]<br>PART A</div>
+    <div class="text-center bold" style="margin-bottom: 8px;">
+        Certificate under section 203 of the Income-tax Act, 1961 for tax deducted at source on payments made to the employee
+    </div>
+
+    <table>
+        <tr>
+            <td style="width: 50%;">
+                <b>Name and address of the Employer / Deductor:</b><br>
+                {{ data.employer_name }}<br>
+                {{ data.employer_address }}
+            </td>
+            <td style="width: 50%;">
+                <b>Name and address of the Employee:</b><br>
+                {{ data.employee_name }}<br>
+                {{ data.office_name }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <b>TDS Circle / CIT (TDS):</b> {{ data.treasury_name }}<br>
+                <b>PAN of Deductor:</b> {{ data.office_pan }}<br>
+                <b>TAN of Deductor:</b> {{ data.tan }}
+            </td>
+            <td>
+                <b>PAN of the Employee:</b> {{ data.pan }}<br>
+                <b>Employee Reference No.:</b> {{ data.employee_code or 'N/A' }}
+            </td>
+        </tr>
+        <tr>
+            <td><b>Assessment Year:</b> {{ data.assessment_year }}</td>
+            <td><b>Period with Employer:</b> 01.04.{{ data.fy_start_year }} to 31.03.{{ data.fy_end_year }}</td>
+        </tr>
+    </table>
+
+    <div class="bold" style="margin-top: 8px;">Summary of amount paid/credited and tax deducted at source thereon in respect of the employee:</div>
+    <table>
+        <thead>
+            <tr style="background-color: #fafafa;">
+                <th>Quarter(s)</th>
+                <th>Receipt Numbers of original statements of TDS under sub-section (3) of section 200</th>
+                <th class="text-right">Amount paid/credited (Rs.)</th>
+                <th class="text-right">Amount of tax deducted (Rs.)</th>
+                <th class="text-right">Amount of tax deposited / remitted (Rs.)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Quarter 1</td>
+                <td>-</td>
+                <td class="text-right">{{ "%.2f"|format(data.q1_paid) }}</td>
+                <td class="text-right">0.00</td>
+                <td class="text-right">0.00</td>
+            </tr>
+            <tr>
+                <td>Quarter 2</td>
+                <td>-</td>
+                <td class="text-right">{{ "%.2f"|format(data.q2_paid) }}</td>
+                <td class="text-right">0.00</td>
+                <td class="text-right">0.00</td>
+            </tr>
+            <tr>
+                <td>Quarter 3</td>
+                <td>-</td>
+                <td class="text-right">{{ "%.2f"|format(data.q3_paid) }}</td>
+                <td class="text-right">0.00</td>
+                <td class="text-right">0.00</td>
+            </tr>
+            <tr>
+                <td>Quarter 4</td>
+                <td>-</td>
+                <td class="text-right">{{ "%.2f"|format(data.q4_paid) }}</td>
+                <td class="text-right">{{ "%.2f"|format(data.actual_tds) }}</td>
+                <td class="text-right">{{ "%.2f"|format(data.actual_tds) }}</td>
+            </tr>
+            <tr class="bold">
+                <td>Total (Rs.)</td>
+                <td></td>
+                <td class="text-right">{{ "%.2f"|format(data.gross_salary) }}</td>
+                <td class="text-right">{{ "%.2f"|format(data.actual_tds) }}</td>
+                <td class="text-right">{{ "%.2f"|format(data.actual_tds) }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="bold" style="margin-top: 10px;">Verification</div>
+    <p style="text-align: justify;">
+        I, <b>{{ data.officer_name }}</b>, son/daughter of <b>{{ data.officer_father_name or '.....................' }}</b> working in the capacity of <b>{{ data.capacity }}</b> do hereby certify that a sum of Rs. <b>{{ "%.2f"|format(data.actual_tds) }}</b> has been deducted and deposited to the credit of the Central Government. I further certify that the information given above is true, complete and correct and is based on the books of account, documents, TDS statements, and other available records.
+    </p>
+    <table class="no-border signature-section">
+        <tr>
+            <td>Place: <b>{{ data.treasury_name }}</b><br>Date: {{ data.generation_date }}</td>
+            <td class="text-right">
+                Signature of person responsible for deduction of tax<br><br>
+                Full Name: <b>{{ data.officer_name }}</b><br>
+                Designation: <b>{{ data.designation_officer }}</b>
+            </td>
+        </tr>
+    </table>
+
+    <!-- PAGE 3: FORM 16 PART B (tds1.pdf Page 3) -->
+    <div class="page-break"></div>
+    <div class="header-title">PART B (Annexure)</div>
+    <div class="sub-header">DETAILS OF SALARY PAID AND ANY OTHER INCOME AND TAX DEDUCTED</div>
+
+    <table>
+        <tbody>
+            <tr>
+                <td colspan="2"><b>1. Gross Salary</b></td>
+                <td style="width: 25%;"></td>
+            </tr>
+            <tr>
+                <td style="padding-left: 15px; width: 50%;">(a) Salary as per provisions contained in sec. 17(1)</td>
+                <td class="text-right" style="width: 25%;">Rs. {{ "%.2f"|format(data.gross_salary) }}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="padding-left: 15px;">(b) Value of perquisites u/s 17(2)</td>
+                <td class="text-right">Rs. 0.00</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="padding-left: 15px;">(c) Profits in lieu of salary under Section 17(3)</td>
+                <td class="text-right">Rs. 0.00</td>
+                <td></td>
+            </tr>
+            <tr class="bold">
+                <td style="padding-left: 15px;">(d) Total Gross Salary</td>
+                <td></td>
+                <td class="text-right">Rs. {{ "%.2f"|format(data.gross_salary) }}</td>
+            </tr>
+            <tr>
+                <td colspan="2"><b>2. Less: Allowance to the extent exempt u/s 10</b></td>
+                <td class="text-right">Rs. 0.00</td>
+            </tr>
+            <tr class="bold">
+                <td colspan="2"><b>3. Balance (1 - 2)</b></td>
+                <td class="text-right">Rs. {{ "%.2f"|format(data.gross_salary) }}</td>
+            </tr>
+            <tr>
+                <td colspan="2"><b>4. Deductions under Section 16:</b></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="padding-left: 15px;">(a) Standard Deduction u/s 16(ia)</td>
+                <td class="text-right">Rs. {{ "%.2f"|format(data.standard_deduction) }}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="padding-left: 15px;">(b) Tax on Employment (Professional Tax) u/s 16(iii)</td>
+                <td class="text-right">Rs. 0.00</td>
+                <td></td>
+            </tr>
+            <tr class="bold">
+                <td colspan="2"><b>5. Aggregate of Deductions under Section 16</b></td>
+                <td class="text-right">Rs. {{ "%.2f"|format(data.standard_deduction) }}</td>
+            </tr>
+            <tr class="bold">
+                <td colspan="2"><b>6. Income Chargeable under the head 'Salaries' (3 - 5)</b></td>
+                <td class="text-right">Rs. {{ "%.2f"|format(data.taxable_income) }}</td>
+            </tr>
+            <tr>
+                <td colspan="2"><b>7. Add: Any other income reported by the employee</b></td>
+                <td class="text-right">Rs. 0.00</td>
+            </tr>
+            <tr class="bold">
+                <td colspan="2"><b>8. Gross Total Income (6 + 7)</b></td>
+                <td class="text-right">Rs. {{ "%.2f"|format(data.taxable_income) }}</td>
+            </tr>
+            <tr>
+                <td colspan="2"><b>9. Deductions under Chapter VI-A (Under New Tax Regime: Not Applicable)</b></td>
+                <td class="text-right">Rs. 0.00</td>
+            </tr>
+            <tr class="bold">
+                <td colspan="2"><b>10. Total Taxable Income (8 - 9)</b></td>
+                <td class="text-right">Rs. {{ "%.2f"|format(data.taxable_income) }}</td>
+            </tr>
+            <tr>
+                <td colspan="2"><b>11. Tax on Total Income</b></td>
+                <td class="text-right">Rs. {{ "%.2f"|format(data.tax_before_rebate) }}</td>
+            </tr>
+            <tr>
+                <td colspan="2"><b>12. Less: Rebate under Section 87A</b></td>
+                <td class="text-right">Rs. {{ "%.2f"|format(data.rebate_87a) }}</td>
+            </tr>
+            <tr class="bold">
+                <td colspan="2"><b>13. Total Tax Payable (11 - 12)</b></td>
+                <td class="text-right">Rs. {{ "%.2f"|format(data.tax_after_rebate) }}</td>
+            </tr>
+            <tr>
+                <td colspan="2"><b>14. Education & Health Cess @ 4%</b></td>
+                <td class="text-right">Rs. {{ "%.2f"|format(data.cess_amount) }}</td>
+            </tr>
+            <tr class="bold">
+                <td colspan="2"><b>15. Total Tax Liability (13 + 14)</b></td>
+                <td class="text-right">Rs. {{ "%.2f"|format(data.total_tax) }}</td>
+            </tr>
+            <tr>
+                <td colspan="2"><b>16. Less: Relief under section 89</b></td>
+                <td class="text-right">Rs. 0.00</td>
+            </tr>
+            <tr class="bold">
+                <td colspan="2"><b>17. Net Tax Payable</b></td>
+                <td class="text-right">Rs. {{ "%.2f"|format(data.total_tax) }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- PAGE 4: MONTHLY SALARY LEDGER (tds1.pdf Page 4) -->
+    <div class="page-break"></div>
+    <div class="header-title">वित्तीय वर्ष {{ data.financial_year }} में वेतन स्रोत से आय और कटौतियों की विवरणी</div>
+    <table class="no-border" style="margin: 6px 0;">
+        <tr>
+            <td><b>नाम:</b> {{ data.employee_name }}</td>
+            <td><b>पदनाम:</b> {{ data.designation }}</td>
+            <td><b>कार्यालय:</b> {{ data.office_name }}</td>
+        </tr>
+    </table>
+
+    <table style="font-size: 8.5px;">
+        <thead>
+            <tr style="background-color: #fafafa;">
+                <th>माह</th>
+                <th>मूल वेतन (Basic)</th>
+                <th>महंगाई भत्ता (DA)</th>
+                <th>मकान किराया (HRA)</th>
+                <th>चिकित्सा (Med)</th>
+                <th>सकल योग (Gross)</th>
+                <th>भविष्य निधि (GPF/NPS)</th>
+                <th>समूह बीमा (GIS)</th>
+                <th>व्यवसाय कर (PTAX)</th>
+                <th>कुल कटौती (Deductions)</th>
+                <th>आयकर (TDS)</th>
+                <th>शुद्ध भुगतान (Net)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data.monthly_rows %}
+            <tr>
+                <td>{{ row.month_name }}</td>
+                <td class="text-right">{{ "%.2f"|format(row.basic) }}</td>
+                <td class="text-right">{{ "%.2f"|format(row.da) }}</td>
+                <td class="text-right">{{ "%.2f"|format(row.hra) }}</td>
+                <td class="text-right">{{ "%.2f"|format(row.medical) }}</td>
+                <td class="text-right bold">{{ "%.2f"|format(row.gross) }}</td>
+                <td class="text-right">{{ "%.2f"|format(row.gpf_nps) }}</td>
+                <td class="text-right">{{ "%.2f"|format(row.gis) }}</td>
+                <td class="text-right">{{ "%.2f"|format(row.ptax) }}</td>
+                <td class="text-right">{{ "%.2f"|format(row.total_deductions) }}</td>
+                <td class="text-right bold">{{ "%.2f"|format(row.tds) }}</td>
+                <td class="text-right bold">{{ "%.2f"|format(row.net) }}</td>
+            </tr>
+            {% endfor %}
+            <tr class="bold" style="background-color: #f2f2f2;">
+                <td>योग (Total)</td>
+                <td class="text-right">{{ "%.2f"|format(data.salary_basic) }}</td>
+                <td class="text-right">{{ "%.2f"|format(data.salary_da) }}</td>
+                <td class="text-right">{{ "%.2f"|format(data.salary_hra) }}</td>
+                <td class="text-right">{{ "%.2f"|format(data.salary_medical) }}</td>
+                <td class="text-right">{{ "%.2f"|format(data.gross_salary - data.salary_arrear) }}</td>
+                <td class="text-right">{{ "%.2f"|format(data.total_gpf_nps) }}</td>
+                <td class="text-right">{{ "%.2f"|format(data.total_gis) }}</td>
+                <td class="text-right">{{ "%.2f"|format(data.total_ptax) }}</td>
+                <td class="text-right">{{ "%.2f"|format(data.total_annual_deductions) }}</td>
+                <td class="text-right">{{ "%.2f"|format(data.actual_tds) }}</td>
+                <td class="text-right">{{ "%.2f"|format(data.total_net_salary) }}</td>
+            </tr>
+            {% if data.salary_arrear > 0 %}
+            <tr style="background-color: #fff9e6;">
+                <td>बकाया वेतन / Arrears</td>
+                <td colspan="4" class="text-center bold">एरियर एवं बकाया भत्ते</td>
+                <td class="text-right bold">{{ "%.2f"|format(data.salary_arrear) }}</td>
+                <td colspan="6"></td>
+            </tr>
+            <tr class="bold" style="background-color: #e6f2ff;">
+                <td>कुल महायोग</td>
+                <td colspan="4"></td>
+                <td class="text-right">{{ "%.2f"|format(data.gross_salary) }}</td>
+                <td colspan="6"></td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+    <table class="no-border signature-section">
+        <tr>
+            <td style="width: 50%;">हस्ताक्षर करदाता: ...................................</td>
+            <td style="width: 50%;" class="text-right">हस्ताक्षर एवं मुहर DDO: ...................................</td>
+        </tr>
+    </table>
+
+</body>
+</html>
